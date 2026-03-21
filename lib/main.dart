@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nhelp/common/PageChange.dart';
+import 'package:nhelp/common/Color.dart';
+import 'package:nhelp/provider/PageChange.dart';
 import 'package:provider/provider.dart';
 import 'ui/AskPage.dart';
 import 'ui/MyNavigationBar.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
+          color: MyColor().backgroundColor,
           home: MyHomePage(),
         );
       },
@@ -41,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColor().backgroundColor,
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
