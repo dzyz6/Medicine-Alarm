@@ -3,16 +3,16 @@ import 'package:nhelp/ui/AskPage.dart';
 
 import '../ui/AlarmPage.dart';
 
-class PageChange extends ChangeNotifier{
-  Widget mainPage=AskPage();
+class PageChange extends ChangeNotifier {
+  Widget mainPage = AskPage();
 
-  void pageChangeToAskPage(){
-    mainPage=AskPage();
+  void pageChangeToAskPage() {
+    mainPage = AskPage();
     notifyListeners();
   }
 
-  void pageChangeToAlarmPage(){
-    mainPage=AlarmPage();
+  void pageChangeToAlarmPage() {
+    mainPage = AlarmPage();
     notifyListeners();
   }
 }

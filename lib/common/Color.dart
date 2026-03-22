@@ -7,5 +7,6 @@ class MyColor{
   var blue2= Color(0xFF2E6FF2);
   var blue3= Color(0xFF1E40AF);
   var backgroundColor=Color(0xFFF2F3F6);
-
+  var pressColor=Color(0xFFE6E7EB);
+  var buttonColor=Color(0xFFD9DADF);
 }

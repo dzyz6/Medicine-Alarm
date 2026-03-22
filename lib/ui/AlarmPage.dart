@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nhelp/common/Color.dart';
+import 'package:nhelp/common/MyButton.dart';
 import 'package:nhelp/common/MyContainer.dart';
+import 'package:nhelp/common/OnTapContainer.dart';
 
 class AlarmPage extends StatefulWidget {
   const AlarmPage({super.key});
@@ -86,6 +88,7 @@ class _AlarmPageState extends State<AlarmPage> {
                     style: TextStyle(fontSize: 30.sp),
                   ),
                 )),
+
           ],
         ),
         floatingButton(),
@@ -132,15 +135,7 @@ class _AlarmPageState extends State<AlarmPage> {
                       //滚轮挑选
                       chooseAlarm(),
                       SizedBox(height: 20.h,),
-                      MyContainer(
-                        height: 55.h,
-                        width: double.infinity,
-                        child: Row(
-                          children: [
-                            Text("备注",style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.w500),),
-                          ],
-                        ),
-                      ),
+                      OnTapContainer(),
                       MyContainer(
                         height: 55.h,
                         width: double.infinity,

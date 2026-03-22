@@ -26,7 +26,7 @@ class _MyNavigationBarState extends State<MyNavigationBar>
     super.initState();
     animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 350),
+      duration: Duration(milliseconds:300),
       value: 0.0,
     );
 
@@ -37,32 +37,31 @@ class _MyNavigationBarState extends State<MyNavigationBar>
 
     shrinkAnimation = Tween<double>(begin: 1, end: 0).animate(CurvedAnimation(
       parent: animationController,
-      curve: const Interval(0.5, 1.0, curve: Curves.easeInCubic),));
+      curve: const Interval(0.5, 1.0, curve: Curves.easeInCubic),
+    ));
 
-    animationController.addListener((){
-      if(animationController.value>=0.5&&onleft){
+    animationController.addListener(() {
+      if (animationController.value >= 0.5 && onleft) {
         setState(() {
           bgleft = null;
-          bgright = 80.w;
+          bgright = 90.w;
         });
-
       }
-      if(animationController.value<=0.5&&!onleft){
-          setState(() {
-            bgleft = 80.w;
-            bgright = null;
-
-          });
+      if (animationController.value <= 0.5 && !onleft) {
+        setState(() {
+          bgleft = 90.w;
+          bgright = null;
+        });
       }
 
-      if(animationController.value>=0.6&&onleft){
+      if (animationController.value >= 0.6 && onleft) {
         setState(() {
           color2 = Colors.black;
           color1 = Colors.white;
         });
       }
 
-      if(animationController.value>=0.6&&!onleft){
+      if (animationController.value >= 0.6 && !onleft) {
         setState(() {
           color1 = Colors.black;
           color2 = Colors.white;
@@ -79,20 +78,22 @@ class _MyNavigationBarState extends State<MyNavigationBar>
 
   var color1 = Colors.black;
   var color2 = Colors.white;
-  double? bgleft = 80.w;
+  double? bgleft = 90.w;
   double? bgright = null;
-  bool onleft=false;
+  bool onleft = true;
 
-  void onRightButton() async{
+  void onRightButton() async {
     if (animationController.isAnimating) return;
-    onleft=!onleft;
-    await animationController.forward();
+    await animationController.forward().whenComplete(() {
+      onleft = !onleft;
+    });
   }
 
-  void onLeftButton() async{
+  void onLeftButton() async {
     if (animationController.isAnimating) return;
-    onleft=!onleft;
-    await animationController.reverse();
+    await animationController.reverse().whenComplete(() {
+      onleft = !onleft;
+    });
   }
 
   @override
@@ -102,10 +103,11 @@ class _MyNavigationBarState extends State<MyNavigationBar>
         builder: (context, child) {
           return Container(
               decoration: BoxDecoration(
-                color:MyColor().blue2,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(10.r),topRight: Radius.circular(10.r))
-              ),
-              height: 80.w,
+                  color: MyColor().blue2,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.r),
+                      topRight: Radius.circular(10.r))),
+              height: 60.w,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -113,12 +115,14 @@ class _MyNavigationBarState extends State<MyNavigationBar>
                       left: bgleft,
                       right: bgright,
                       child: Container(
-                        width: animationController.value<0.5?expandAnimation.value*155.w+60.w:shrinkAnimation.value*155.w+60.w,
-                        height: 60.h,
+                        width: animationController.value < 0.5
+                            ? expandAnimation.value * 155.w + 40.w
+                            : shrinkAnimation.value * 155.w + 40.w,
+                        height: 40.h,
                         padding: EdgeInsets.all(5.sp),
                         decoration: BoxDecoration(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(30.r)),
+                                BorderRadius.all(Radius.circular(30.r)),
                             color: Colors.white),
                       )),
                   Positioned(
@@ -126,8 +130,8 @@ class _MyNavigationBarState extends State<MyNavigationBar>
                     child: InkWell(
                         splashColor: Colors.white.withAlpha(30),
                         onTap: () {
-                          context.read<PageChange>().pageChangeToAskPage();
                           onLeftButton();
+                          context.read<PageChange>().pageChangeToAskPage();
                         },
                         child: Container(
                             width: 60.w,
@@ -135,7 +139,7 @@ class _MyNavigationBarState extends State<MyNavigationBar>
                             padding: EdgeInsets.all(5.sp),
                             decoration: BoxDecoration(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(30.r)),
+                                    BorderRadius.all(Radius.circular(30.r)),
                                 color: Colors.transparent),
                             child: Icon(
                               Icons.add_task,
@@ -147,8 +151,8 @@ class _MyNavigationBarState extends State<MyNavigationBar>
                     child: InkWell(
                         splashColor: Colors.white.withAlpha(30),
                         onTap: () async {
-                          context.read<PageChange>().pageChangeToAlarmPage();
                           onRightButton();
+                          context.read<PageChange>().pageChangeToAlarmPage();
                         },
                         child: Container(
                             width: 60.w,
@@ -156,7 +160,7 @@ class _MyNavigationBarState extends State<MyNavigationBar>
                             padding: EdgeInsets.all(5.sp),
                             decoration: BoxDecoration(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(30.r)),
+                                    BorderRadius.all(Radius.circular(30.r)),
                                 color: Colors.transparent),
                             child: Icon(
                               Icons.calendar_today_outlined,

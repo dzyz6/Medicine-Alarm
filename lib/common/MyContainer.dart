@@ -26,7 +26,7 @@ class _MyContainerState extends State<MyContainer> {
       height: widget.height,
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(15.r)),
+          borderRadius: BorderRadius.all(Radius.circular(16.r)),
         boxShadow:[
           BoxShadow(
             color: Color(0x1A000000), // 透明度26%（比之前的15%稍高），仍浅
