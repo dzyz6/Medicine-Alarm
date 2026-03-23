@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nhelp/common/Color.dart';
 import 'package:nhelp/common/MyButton.dart';
-import 'package:nhelp/common/MyContainer.dart';
-import 'package:nhelp/common/OnTapContainer.dart';
+
+import 'package:nhelp/common/container/OnTapContainer.dart';
+
+import '../common/container/MyContainer.dart';
 
 class AlarmPage extends StatefulWidget {
   const AlarmPage({super.key});
@@ -135,7 +137,7 @@ class _AlarmPageState extends State<AlarmPage> {
                       //滚轮挑选
                       chooseAlarm(),
                       SizedBox(height: 20.h,),
-                      OnTapContainer(),
+                      OnTapContainer(text: "响铃时振动",),
                       MyContainer(
                         height: 55.h,
                         width: double.infinity,
