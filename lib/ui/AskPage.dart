@@ -137,7 +137,7 @@ class _MyMedicineState extends State<MyMedicine> {
 
   @override
   Widget build(BuildContext context) {
-    return MyContainer(
+    return Container(
       child: Row(
         children: [
           Container(

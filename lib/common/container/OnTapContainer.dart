@@ -4,18 +4,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nhelp/common/Color.dart';
+import 'package:nhelp/common/CommonPrefs.dart';
 
 import '../MyButton.dart';
 
 
 
 
-
+///背景点击连接button的container
 class OnTapContainer extends StatefulWidget {
-  OnTapContainer({super.key, this.onTap,required this.text});
+  OnTapContainer({super.key, this.onTap,required this.text,required this.size});
 
   Function()? onTap;
   String text;
+  double size;
 
   @override
   State<OnTapContainer> createState() => _OnTapContainerState();
@@ -30,7 +32,6 @@ class _OnTapContainerState extends State<OnTapContainer> with SingleTickerProvid
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _animationController=AnimationController(vsync: this,duration: Duration(milliseconds: 200));
     _colorAnimation = ColorTween(
@@ -43,7 +44,7 @@ class _OnTapContainerState extends State<OnTapContainer> with SingleTickerProvid
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    valueNotifier.dispose();
     _resetPressTimer?.cancel();
     _animationController.dispose();
     super.dispose();
@@ -70,68 +71,59 @@ class _OnTapContainerState extends State<OnTapContainer> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-
-        GestureDetector(
-          onTapCancel: () {
-            _setPressedState(false);
-          },
-          onTapDown: (details) {
-            _setPressedState(true);
-            _animationController.forward();
-          },
-          onTapUp: (details) {
-            _setPressedState(false);
-            if (widget.onTap != null) {
-              widget.onTap!();
-            }
-            valueNotifier.value=!valueNotifier.value;
-          },
-          child: AnimatedBuilder(
-            animation: _colorAnimation,
-            builder: (context,child) {
-              return Container(
-                margin: EdgeInsets.symmetric(horizontal: 10.w,vertical: 5.h),
-                padding: EdgeInsets.symmetric(horizontal: 15.w,vertical: 10.h),
-                height: 55.h,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: _colorAnimation.value,
-                    borderRadius: BorderRadius.all(Radius.circular(16.r)),
-                    boxShadow:[
-                      BoxShadow(
-                        color: Color(0x1A000000), // 透明度26%（比之前的15%稍高），仍浅
-                        blurRadius: 1,
-                        offset: Offset(0, 0),
-                        spreadRadius: 0, // 不扩散，仅边缘有阴影
-                      )
-                    ]
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.text,
-                      style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+    return LayoutBuilder(
+      builder: (context,constraints) {
+        final parentHeight = constraints.maxHeight;
+        final buttonTop = ((parentHeight-widget.size.h)/2).h;
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            GestureDetector(
+              onTapCancel: () {
+                _setPressedState(false);
+              },
+              onTapDown: (details) {
+                _setPressedState(true);
+                _animationController.forward();
+              },
+              onTapUp: (details) {
+                _setPressedState(false);
+                if (widget.onTap != null) {
+                  widget.onTap!();
+                }
+                valueNotifier.value=!valueNotifier.value;
+              },
+              child: AnimatedBuilder(
+                animation: _colorAnimation,
+                builder: (context,child) {
+                  return Container(
+                    color:  _colorAnimation.value,
+                    padding: CommonPrefs.padding(),
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        widget.text,
+                        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+                      ),
                     ),
+                  );
+                }
+              ),
+            ),
 
-                  ],
-                ),
-              );
-            }
-          ),
-        ),
-
-        Positioned(
-          top: 20.h,
-          right: 25.w,
-          child: MyButton(
-            size: 25,
-            valueNotifier: valueNotifier,
-          ),
-        ),
-      ],
+            Positioned(
+              top: 15.h,
+              right:10.w,
+              child: MyButton(
+                size: widget.size,
+                valueNotifier: valueNotifier,
+              ),
+            ),
+          ],
+        );
+      }
     );
   }
 }

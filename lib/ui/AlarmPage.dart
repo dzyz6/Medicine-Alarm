@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nhelp/common/Color.dart';
+import 'package:nhelp/common/CommonPrefs.dart';
 import 'package:nhelp/common/MyButton.dart';
 
 import 'package:nhelp/common/container/OnTapContainer.dart';
@@ -16,7 +17,6 @@ class AlarmPage extends StatefulWidget {
 }
 
 class _AlarmPageState extends State<AlarmPage> {
-
   late FixedExtentScrollController fixedExtentScrollController;
   late FixedExtentScrollController fixedExtentScrollController2;
 
@@ -28,10 +28,10 @@ class _AlarmPageState extends State<AlarmPage> {
     var now = DateTime.now();
 
     fixedExtentScrollController = FixedExtentScrollController(
-      initialItem: now.hour ,
+      initialItem: now.hour,
     );
     fixedExtentScrollController2 = FixedExtentScrollController(
-      initialItem: now.minute ,
+      initialItem: now.minute,
     );
 
     fixedExtentScrollController.addListener(timeCalculate);
@@ -52,17 +52,25 @@ class _AlarmPageState extends State<AlarmPage> {
 
   Duration timeCalculate() {
     DateTime dateTime = DateTime.now();
-    if (!fixedExtentScrollController.hasClients || !fixedExtentScrollController2.hasClients) {
-      return Duration(hours:23,minutes:  59); // 或其他默认值
+    if (!fixedExtentScrollController.hasClients ||
+        !fixedExtentScrollController2.hasClients) {
+      return Duration(hours: 23, minutes: 59); // 或其他默认值
     }
-    DateTime dateTime2 = DateTime(dateTime.year, dateTime.month, dateTime.day,
+    DateTime dateTime2 = DateTime(
+        dateTime.year,
+        dateTime.month,
+        dateTime.day,
         fixedExtentScrollController.selectedItem,
-        fixedExtentScrollController2.selectedItem,0,0);
-    if(dateTime.isBefore(dateTime2)){
+        fixedExtentScrollController2.selectedItem,
+        0,
+        0);
+    if (dateTime.isBefore(dateTime2)) {
       return dateTime2.difference(dateTime);
-    }
-    else{
-      DateTime dateTime3 = DateTime(dateTime.year, dateTime.month, dateTime.day+1,
+    } else {
+      DateTime dateTime3 = DateTime(
+          dateTime.year,
+          dateTime.month,
+          dateTime.day + 1,
           fixedExtentScrollController.selectedItem,
           fixedExtentScrollController2.selectedItem);
       return dateTime3.difference(dateTime);
@@ -90,7 +98,6 @@ class _AlarmPageState extends State<AlarmPage> {
                     style: TextStyle(fontSize: 30.sp),
                   ),
                 )),
-
           ],
         ),
         floatingButton(),
@@ -109,11 +116,11 @@ class _AlarmPageState extends State<AlarmPage> {
       child: GestureDetector(
         onTap: () {
           showModalBottomSheet(
-            backgroundColor: MyColor().backgroundColor,
+              backgroundColor: MyColor().backgroundColor,
               context: context,
               builder: (context) {
                 return SizedBox(
-                  height: 750.h,
+                  height: 770.h,
                   width: double.infinity,
                   child: Column(
                     children: [
@@ -133,21 +140,75 @@ class _AlarmPageState extends State<AlarmPage> {
 
                       //功能行
                       addAlarmAppbar(),
-                      SizedBox(height: 20.h,),
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       //滚轮挑选
                       chooseAlarm(),
-                      SizedBox(height: 20.h,),
-                      OnTapContainer(text: "响铃时振动",),
-                      MyContainer(
-                        height: 55.h,
-                        width: double.infinity,
-                        child: Row(
+
+                      SingleChildScrollView(
+                        physics:  AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text("备注",style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.w500),),
+                            Container(
+                                height: (55.h)*4,
+                                width: double.infinity,
+                                clipBehavior: Clip.hardEdge,
+                                decoration: CommonPrefs.decoration(Colors.white),
+                                margin: CommonPrefs.margin(),
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height:55.h,
+                                      child: OnTapContainer(
+                                        size: 25,
+                                        text: "A",
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height:55.h,
+                                      child: OnTapContainer(
+                                        size: 25,
+                                        text: "B",
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height:55.h,
+                                      child: OnTapContainer(
+                                        size: 25,
+                                        text: "响铃时振动",
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height:55.h,
+                                      child: OnTapContainer(
+                                        size: 25,
+                                        text: "响铃后删除此闹钟",
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                            Container(
+                              height: 55.h,
+                              width: double.infinity,
+                              clipBehavior: Clip.hardEdge,
+                              decoration: CommonPrefs.decoration(Colors.white),
+                              margin: CommonPrefs.margin(),
+                              padding: CommonPrefs.padding(),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "备注",
+                                    style: TextStyle(
+                                        fontSize: 16.sp, fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
-                      ),
-
+                      )
                     ],
                   ),
                 );
@@ -194,22 +255,26 @@ class _AlarmPageState extends State<AlarmPage> {
                 size: 30.sp,
               )),
           ListenableBuilder(
-            listenable:  Listenable.merge([fixedExtentScrollController, fixedExtentScrollController2]),
-            builder: (context,child) {
-              return Column(
-                children: [
-                  Text(
-                    "添加闹钟",
-                    style: TextStyle(fontSize: 20.sp),
-                  ),
-                  Text((timeCalculate().inHours==0)&&(timeCalculate().inMinutes%60)==0?"不到1分钟后响铃"
-                    :"${timeCalculate().inHours}小时${timeCalculate().inMinutes%60}分钟后响铃",
-                    style: TextStyle(fontSize: 15.sp, color: Colors.grey[700]),
-                  )
-                ],
-              );
-            }
-          ),
+              listenable: Listenable.merge(
+                  [fixedExtentScrollController, fixedExtentScrollController2]),
+              builder: (context, child) {
+                return Column(
+                  children: [
+                    Text(
+                      "添加闹钟",
+                      style: TextStyle(fontSize: 20.sp),
+                    ),
+                    Text(
+                      (timeCalculate().inHours == 0) &&
+                              (timeCalculate().inMinutes % 60) == 0
+                          ? "不到1分钟后响铃"
+                          : "${timeCalculate().inHours}小时${timeCalculate().inMinutes % 60}分钟后响铃",
+                      style:
+                          TextStyle(fontSize: 15.sp, color: Colors.grey[700]),
+                    )
+                  ],
+                );
+              }),
           IconButton(
               onPressed: () {},
               icon: Icon(
@@ -222,18 +287,22 @@ class _AlarmPageState extends State<AlarmPage> {
   }
 
   Widget chooseAlarm() {
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 50.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-            height: 400.h,
+            height: 280.h,
             child: Column(
               children: [
-                Text("时", style: TextStyle(fontSize: 15.sp),),
-                SizedBox(height: 15.h,),
+                Text(
+                  "时",
+                  style: TextStyle(fontSize: 15.sp),
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
                 SizedBox(
                   height: 200.h,
                   width: 137.w,
@@ -245,22 +314,29 @@ class _AlarmPageState extends State<AlarmPage> {
                       controller: fixedExtentScrollController,
                       physics: FixedExtentScrollPhysics(),
                       itemExtent: 45.h,
-                      childDelegate:
-                      ListWheelChildBuilderDelegate(builder: (context, index) {
-                        return Text("${index % 24}".padLeft(2, '0'),
+                      childDelegate: ListWheelChildBuilderDelegate(
+                          builder: (context, index) {
+                        return Text(
+                          "${index % 24}".padLeft(2, '0'),
                           style: TextStyle(
-                              fontSize: 30.sp, fontWeight: FontWeight.w500),);
+                              fontSize: 30.sp, fontWeight: FontWeight.w500),
+                        );
                       })),
                 ),
               ],
             ),
           ),
           SizedBox(
-            height: 400.h,
+            height: 280.h,
             child: Column(
               children: [
-                Text("分", style: TextStyle(fontSize: 15.sp),),
-                SizedBox(height: 15.h,),
+                Text(
+                  "分",
+                  style: TextStyle(fontSize: 15.sp),
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
                 SizedBox(
                   height: 200.h,
                   width: 137.w,
@@ -272,11 +348,13 @@ class _AlarmPageState extends State<AlarmPage> {
                       controller: fixedExtentScrollController2,
                       physics: FixedExtentScrollPhysics(),
                       itemExtent: 45.h,
-                      childDelegate:
-                      ListWheelChildBuilderDelegate(builder: (context, index) {
-                        return Text("${index % 60}".padLeft(2, '0'),
+                      childDelegate: ListWheelChildBuilderDelegate(
+                          builder: (context, index) {
+                        return Text(
+                          "${index % 60}".padLeft(2, '0'),
                           style: TextStyle(
-                              fontSize: 30.sp, fontWeight: FontWeight.w500),);
+                              fontSize: 30.sp, fontWeight: FontWeight.w500),
+                        );
                       })),
                 ),
               ],

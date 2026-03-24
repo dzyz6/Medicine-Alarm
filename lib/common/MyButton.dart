@@ -22,7 +22,6 @@ class _MyButtonState extends State<MyButton>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     animationController.dispose();
     super.dispose();
   }
