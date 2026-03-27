@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nhelp/common/Color.dart';
-import 'package:nhelp/provider/PageChange.dart';
+import 'package:nhelp/common/utils/Color.dart';
+
 import 'package:provider/provider.dart';
-import 'ui/AskPage.dart';
-import 'ui/MyNavigationBar.dart';
+import 'common/provider/PageChange.dart';
+import 'firstpage/AskPage.dart';
+import 'navigationbar/MyNavigationBar.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(

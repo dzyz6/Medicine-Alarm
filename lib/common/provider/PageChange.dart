@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:nhelp/ui/AskPage.dart';
+import 'package:nhelp/firstpage/AskPage.dart';
 
-import '../ui/AlarmPage.dart';
+import '../../secondpage/AlarmPage.dart';
+
+
 
 class PageChange extends ChangeNotifier {
   Widget mainPage = AskPage();

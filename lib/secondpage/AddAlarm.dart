@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nhelp/common/localstorage/MySharedPreference.dart';
+import 'package:nhelp/common/utils/Alarm.dart';
+import 'package:nhelp/secondpage/widget/OnTapContainer.dart';
 
-import '../common/Color.dart';
-import '../common/CommonPrefs.dart';
-import '../common/container/OnTapContainer.dart';
+import '../common/utils/Color.dart';
+import '../common/utils/CommonPrefs.dart';
+
 
 class AddAlarm extends StatefulWidget {
   const AddAlarm({super.key});
@@ -18,9 +21,12 @@ class _AddAlarmState extends State<AddAlarm> {
   late FixedExtentScrollController fixedExtentScrollController;
   late FixedExtentScrollController fixedExtentScrollController2;
 
-  TextEditingController _textEditingController = new TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
 
-  FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode();
+
+  bool vibrate=false;
+  bool finishDelete=false;
 
   ///计算选择时间与当前差
   Duration timeCalculate() {
@@ -52,7 +58,6 @@ class _AddAlarmState extends State<AddAlarm> {
 
   @override
   void initState() {
-
     super.initState();
 
     _focusNode.addListener(() {
@@ -73,7 +78,6 @@ class _AddAlarmState extends State<AddAlarm> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       timeCalculate();
     });
-
   }
 
   @override
@@ -90,14 +94,18 @@ class _AddAlarmState extends State<AddAlarm> {
     FocusScope.of(context).requestFocus(_focusNode);
   }
 
+
   @override
   Widget build(BuildContext context) {
     final double keyboardHeight =
-        MediaQuery.of(context).viewInsets.bottom;
+        MediaQuery
+            .of(context)
+            .viewInsets
+            .bottom;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Padding(
@@ -119,6 +127,7 @@ class _AddAlarmState extends State<AddAlarm> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      //滚轮
                       chooseAlarm(),
                       //底部功能
                       alarmFunction(),
@@ -178,7 +187,8 @@ class _AddAlarmState extends State<AddAlarm> {
                       (timeCalculate().inHours == 0) &&
                           (timeCalculate().inMinutes % 60) == 0
                           ? "不到1分钟后响铃"
-                          : "${timeCalculate().inHours}小时${timeCalculate().inMinutes % 60}分钟后响铃",
+                          : "${timeCalculate().inHours}小时${timeCalculate()
+                          .inMinutes % 60}分钟后响铃",
                       style:
                       TextStyle(fontSize: 15.sp, color: Colors.grey[700]),
                     )
@@ -186,7 +196,11 @@ class _AddAlarmState extends State<AddAlarm> {
                 );
               }),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Alarm.createAlarm(fixedExtentScrollController.selectedItem,
+                    fixedExtentScrollController2.selectedItem, vibrate,
+                    finishDelete, _textEditingController.text);
+              },
               icon: Icon(
                 Icons.check,
                 size: 30.sp,
@@ -284,7 +298,7 @@ class _AddAlarmState extends State<AddAlarm> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-              height: (55.h) * 4,
+              height: (55.h) * 2,
               width: double.infinity,
               clipBehavior: Clip.hardEdge,
               decoration: CommonPrefs.decoration(Colors.white),
@@ -295,21 +309,10 @@ class _AddAlarmState extends State<AddAlarm> {
                     height: 55.h,
                     child: OnTapContainer(
                       size: 25,
-                      text: "A",
-                    ),
-                  ),
-                  SizedBox(
-                    height: 55.h,
-                    child: OnTapContainer(
-                      size: 25,
-                      text: "B",
-                    ),
-                  ),
-                  SizedBox(
-                    height: 55.h,
-                    child: OnTapContainer(
-                      size: 25,
                       text: "响铃时振动",
+                      onTap: (){
+                        vibrate=!vibrate;
+                      },
                     ),
                   ),
                   SizedBox(
@@ -317,6 +320,9 @@ class _AddAlarmState extends State<AddAlarm> {
                     child: OnTapContainer(
                       size: 25,
                       text: "响铃后删除此闹钟",
+                      onTap: (){
+                        finishDelete=!finishDelete;
+                      },
                     ),
                   ),
                 ],
@@ -327,7 +333,7 @@ class _AddAlarmState extends State<AddAlarm> {
     );
   }
 
-  Widget inputItem(){
+  Widget inputItem() {
     return GestureDetector(
       onTap: openTextField,
       child: Container(
@@ -338,7 +344,8 @@ class _AddAlarmState extends State<AddAlarm> {
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(16.r)),
             border: Border.all(
-                color: _focusNode.hasFocus?MyColor().blue2:Colors.transparent,
+                color: _focusNode.hasFocus ? MyColor().blue2 : Colors
+                    .transparent,
                 width: 2.sp
             ),
             boxShadow: [

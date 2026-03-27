@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nhelp/common/Color.dart';
+import 'package:nhelp/common/utils/Color.dart';
 import 'AddAlarm.dart';
+import 'AlarmList.dart';
 
 class AlarmPage extends StatefulWidget {
   const AlarmPage({super.key});
@@ -37,6 +38,7 @@ class _AlarmPageState extends State<AlarmPage> {
                     style: TextStyle(fontSize: 30.sp),
                   ),
                 )),
+            AlarmList(),
           ],
         ),
 

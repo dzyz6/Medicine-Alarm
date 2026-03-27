@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nhelp/common/Color.dart';
+import 'package:nhelp/common/utils/Color.dart';
 
 class MyButton extends StatefulWidget {
   MyButton(

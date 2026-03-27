@@ -3,9 +3,11 @@ import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nhelp/common/Color.dart';
-import 'package:nhelp/provider/PageChange.dart';
+import 'package:nhelp/common/utils/Color.dart';
+
 import 'package:provider/provider.dart';
+
+import '../common/provider/PageChange.dart';
 
 class MyNavigationBar extends StatefulWidget {
   const MyNavigationBar({super.key});
@@ -26,7 +28,7 @@ class _MyNavigationBarState extends State<MyNavigationBar>
     super.initState();
     animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds:300),
+      duration: Duration(milliseconds:350),
       value: 0.0,
     );
 

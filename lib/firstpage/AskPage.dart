@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nhelp/common/Color.dart';
+import 'package:nhelp/common/utils/Color.dart';
 
 
-import '../common/container/MyContainer.dart';
 
 class AskPage extends StatelessWidget {
   const AskPage({super.key});

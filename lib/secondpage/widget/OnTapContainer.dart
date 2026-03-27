@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nhelp/common/Color.dart';
-import 'package:nhelp/common/CommonPrefs.dart';
+import 'package:nhelp/common/utils/Color.dart';
+import 'package:nhelp/common/utils/CommonPrefs.dart';
 
-import '../MyButton.dart';
+import 'MyButton.dart';
 
 
 

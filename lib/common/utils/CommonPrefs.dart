@@ -14,7 +14,7 @@ class CommonPrefs {
   static decoration(Color color) {
     return BoxDecoration(
         color:color,
-        borderRadius: BorderRadius.all(Radius.circular(16.r)),
+        borderRadius: BorderRadius.all(Radius.circular(18.r)),
         boxShadow: [
           BoxShadow(
             color: Color(0x1A000000), // 透明度26%（比之前的15%稍高），仍浅
