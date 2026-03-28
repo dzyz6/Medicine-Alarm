@@ -142,7 +142,7 @@ class _AddAlarmState extends State<AddAlarm> {
     );;
   }
 
-  ///灰色条
+  ///灰色条装饰
   Widget stripe() {
     return Opacity(
       opacity: 0.5,
@@ -197,9 +197,11 @@ class _AddAlarmState extends State<AddAlarm> {
               }),
           IconButton(
               onPressed: () {
-                Alarm.createAlarm(fixedExtentScrollController.selectedItem,
-                    fixedExtentScrollController2.selectedItem, vibrate,
+                Alarm.createAlarm(fixedExtentScrollController.selectedItem%24,
+                    fixedExtentScrollController2.selectedItem%60, vibrate,
                     finishDelete, _textEditingController.text);
+                alarmRefreshNotifier.value = !alarmRefreshNotifier.value;
+                Navigator.of(context).pop();
               },
               icon: Icon(
                 Icons.check,

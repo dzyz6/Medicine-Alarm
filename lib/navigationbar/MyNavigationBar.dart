@@ -106,10 +106,8 @@ class _MyNavigationBarState extends State<MyNavigationBar>
           return Container(
               decoration: BoxDecoration(
                   color: MyColor().blue2,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10.r),
-                      topRight: Radius.circular(10.r))),
-              height: 60.w,
+                  ),
+              height: 60.h,
               child: Stack(
                 alignment: Alignment.center,
                 children: [

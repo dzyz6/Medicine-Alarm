@@ -5,11 +5,12 @@ import 'package:nhelp/common/utils/Color.dart';
 
 class MyButton extends StatefulWidget {
   MyButton(
-      {super.key, this.onTap, required this.size, this.valueNotifier});
+      {super.key, this.onTap, required this.size, this.valueNotifier,this.open=false});
 
   Function? onTap;
   double size;
   ValueNotifier? valueNotifier;
+  bool open;
 
   @override
   State<MyButton> createState() => _MyButtonState();
@@ -33,11 +34,19 @@ class _MyButtonState extends State<MyButton>
         AnimationController(vsync: this, duration: Duration(milliseconds: 150));
     curvedAnimation =
         CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
+    curState=(widget.open)?1:0;
+    curState = widget.open ? 1 : 0;
+    curColor = widget.open ? MyColor().blue2 : MyColor().buttonColor;
+
+    if (widget.open) {
+      animationController.value = 1; // 直接设置开关位置
+    }
+
   }
 
 
   //当前按钮状态
-  int curState = 0;
+   int curState =0;
 
   var curColor = MyColor().buttonColor;
 

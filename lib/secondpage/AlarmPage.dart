@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nhelp/common/provider/AlarmDelete.dart';
 import 'package:nhelp/common/utils/Color.dart';
+import 'package:provider/provider.dart';
 import 'AddAlarm.dart';
 import 'AlarmList.dart';
 
@@ -15,15 +17,18 @@ class AlarmPage extends StatefulWidget {
 class _AlarmPageState extends State<AlarmPage> {
 
 
-
-
   @override
   Widget build(BuildContext context) {
+
     return Stack(
       children: [
         Column(
           children: [
             AppBar(
+              leading: Provider.of<AlarmDelete>(context).isDeleteMode?IconButton(onPressed: (){
+                Provider.of<AlarmDelete>(context,listen: false).setMode(false);
+                Provider.of<AlarmDelete>(context,listen: false).clearSet();
+              }, icon: Icon(Icons.close,size: 30.sp,)):Container(),
               backgroundColor: MyColor().backgroundColor,
               actions: [
                 IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
@@ -33,7 +38,8 @@ class _AlarmPageState extends State<AlarmPage> {
                 alignment: Alignment.centerLeft,
                 child: Container(
                   margin: EdgeInsets.only(left: 20.w),
-                  child: Text(
+                  child: Provider.of<AlarmDelete>(context).isDeleteMode?
+                      Text("已选择${Provider.of<AlarmDelete>(context).selectedId.length}项",style: TextStyle(fontSize: 30.sp),):Text(
                     "闹钟",
                     style: TextStyle(fontSize: 30.sp),
                   ),
