@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nhelp/common/localstorage/MySharedPreference.dart';
 import 'package:nhelp/common/provider/AlarmDelete.dart';
+import 'package:nhelp/common/utils/Color.dart';
 import 'package:nhelp/secondpage/widget/AlarmContainer.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +30,7 @@ class _AlarmListState extends State<AlarmList> {
           return FutureBuilder(
               future: mySharedPreference.getAlarmList(),
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   List<Alarm> alarms = snapshot.data!
                     ..sort((a, b) {
                       if (a.hour != b.hour) {
@@ -36,17 +38,12 @@ class _AlarmListState extends State<AlarmList> {
                       }
                       return a.minute.compareTo(b.minute);
                     });
-
-                  // ======================================
-                  // 找到最近开启的闹钟，并得到剩余小时、分钟
-                  // ======================================
                   int remainingHours = 0;
                   int remainingMinutes = 0;
 
                   DateTime now = DateTime.now();
                   DateTime today = DateTime(now.year, now.month, now.day);
 
-                  // 筛选开启的闹钟
                   List<Alarm> openAlarms = alarms.where((e) => e.open).toList();
 
                   if (openAlarms.isNotEmpty) {
@@ -69,29 +66,29 @@ class _AlarmListState extends State<AlarmList> {
                       }
                     }
 
-                    // 赋值给你要的两个变量
                     remainingHours = minDuration!.inHours;
                     remainingMinutes = minDuration.inMinutes.remainder(60);
                   }
 
                   List<AlarmContainer> alarmList = alarms.map((alarm) {
                     return AlarmContainer(
-                        alarm: alarm,
-                        onLongPress: () {
-                          provider.setMode(true);
-                          provider.addSet(alarm.id);
-                        },
-                        onTap: () {
-                          if (provider.isDeleteMode) {
-                            if (provider.selectedId.contains(alarm.id)) {
-                              provider.removeSet(alarm.id);
-                            } else {
-                              provider.addSet(alarm.id);
-                            }
+                      alarm: alarm,
+                      onLongPress: () {
+                        provider.setMode(true);
+                        provider.addSet(alarm.id);
+                      },
+                      onTap: () {
+                        if (provider.isDeleteMode) {
+                          if (provider.selectedId.contains(alarm.id)) {
+                            provider.removeSet(alarm.id);
+                          } else {
+                            provider.addSet(alarm.id);
                           }
-                        },
+                        }
+                      },
                     );
                   }).toList();
+                  print(snapshot.data);
 
                   ///列表
                   return Expanded(
@@ -108,14 +105,19 @@ class _AlarmListState extends State<AlarmList> {
                       ],
                     ),
                   );
-                } else if (snapshot.data == null) {
-                  return Container(
-                      margin: EdgeInsets.only(top: 40.h, bottom: 70.h),
-                      child: Center(
-                          child: Text(
-                        "所有闹钟已关闭",
-                        style: TextStyle(fontSize: 25.sp),
-                      )));
+                } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+                  return Padding(
+                    padding:  EdgeInsets.only(top: 240.h),
+                    child: Column(
+                      children: [
+                        Icon(Icons.alarm,size: 60.sp,color: MyColor().unpressedTextColor,),
+                        Text(
+                          "未设置闹钟",
+                          style: TextStyle(fontSize: 15.sp),
+                        ),
+                      ],
+                    ),
+                  );
                 } else {
                   return Container();
                 }
@@ -126,6 +128,7 @@ class _AlarmListState extends State<AlarmList> {
   Widget timeRing(int hour, int minute) {
     if (hour == 0 && minute == 0) {
       return Container(
+          height: 40.h,
           margin: EdgeInsets.only(top: 40.h, bottom: 70.h),
           child: Center(
               child: Text(
@@ -134,6 +137,7 @@ class _AlarmListState extends State<AlarmList> {
           )));
     }
     return Container(
+        height: 40.h,
         margin: EdgeInsets.only(top: 40.h, bottom: 70.h),
         child: Center(
             child: Text(

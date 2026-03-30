@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nhelp/common/localstorage/MySharedPreference.dart';
 import 'package:nhelp/common/provider/AlarmDelete.dart';
 import 'package:nhelp/common/utils/Color.dart';
 import 'package:provider/provider.dart';
@@ -15,38 +16,58 @@ class AlarmPage extends StatefulWidget {
 }
 
 class _AlarmPageState extends State<AlarmPage> {
-
-
   @override
   Widget build(BuildContext context) {
-
+    var isDeleteMode = Provider.of<AlarmDelete>(context).isDeleteMode;
     return Stack(
       children: [
         Column(
           children: [
             AppBar(
-              leading: Provider.of<AlarmDelete>(context).isDeleteMode?IconButton(onPressed: (){
-                Provider.of<AlarmDelete>(context,listen: false).setMode(false);
-                Provider.of<AlarmDelete>(context,listen: false).clearSet();
-              }, icon: Icon(Icons.close,size: 30.sp,)):Container(),
+              leading: isDeleteMode
+                  ? IconButton(
+                      onPressed: () {
+                        Provider.of<AlarmDelete>(context, listen: false)
+                            .setMode(false);
+                        Provider.of<AlarmDelete>(context, listen: false)
+                            .clearSet();
+                      },
+                      icon: Icon(
+                        Icons.close,
+                        size: 30.sp,
+                      ))
+                  : Container(),
               backgroundColor: MyColor().backgroundColor,
               actions: [
-                IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
+                isDeleteMode
+                    ? IconButton(
+                        onPressed: () {
+                          Provider.of<AlarmDelete>(context, listen: false)
+                              .addAll();
+                        },
+                        icon: Icon(Icons.menu))
+                    : IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
               ],
             ),
             Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
                   margin: EdgeInsets.only(left: 20.w),
-                  child: Provider.of<AlarmDelete>(context).isDeleteMode?
-                      Text("已选择${Provider.of<AlarmDelete>(context).selectedId.length}项",style: TextStyle(fontSize: 30.sp),):Text(
-                    "闹钟",
-                    style: TextStyle(fontSize: 30.sp),
-                  ),
+                  height: 40.h,
+                  child: isDeleteMode
+                      ? Text(
+                          "已选择${Provider.of<AlarmDelete>(context).selectedId.length}项",
+                          style: TextStyle(fontSize: 30.sp),
+                        )
+                      : Text(
+                          "闹钟",
+                          style: TextStyle(fontSize: 30.sp),
+                        ),
                 )),
             AlarmList(),
           ],
         ),
+
 
         ///悬浮按钮
         floatingButton(),
@@ -57,6 +78,7 @@ class _AlarmPageState extends State<AlarmPage> {
   Widget alarmRemind() {
     return Container();
   }
+
 
   Widget floatingButton() {
     return Positioned(
@@ -69,7 +91,6 @@ class _AlarmPageState extends State<AlarmPage> {
               context: context,
               constraints: BoxConstraints(maxHeight: 770.h),
               builder: (BuildContext modalContext) {
-
                 return AddAlarm();
               },
               isScrollControlled: true);
@@ -98,7 +119,4 @@ class _AlarmPageState extends State<AlarmPage> {
       ),
     );
   }
-
-
 }
-

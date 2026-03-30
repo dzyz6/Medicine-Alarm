@@ -196,12 +196,13 @@ class _AddAlarmState extends State<AddAlarm> {
                 );
               }),
           IconButton(
-              onPressed: () {
-                Alarm.createAlarm(fixedExtentScrollController.selectedItem%24,
+              onPressed: ()async {
+                var n=Navigator.of(context);
+                await Alarm.createAlarm(fixedExtentScrollController.selectedItem%24,
                     fixedExtentScrollController2.selectedItem%60, vibrate,
                     finishDelete, _textEditingController.text);
                 alarmRefreshNotifier.value = !alarmRefreshNotifier.value;
-                Navigator.of(context).pop();
+                n.pop();
               },
               icon: Icon(
                 Icons.check,

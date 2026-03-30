@@ -4,13 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nhelp/common/utils/Color.dart';
+import 'package:nhelp/firstpage/AskPage.dart';
 
 import 'package:provider/provider.dart';
 
 import '../common/provider/PageChange.dart';
 
 class MyNavigationBar extends StatefulWidget {
-  const MyNavigationBar({super.key});
+   const MyNavigationBar({super.key});
 
   @override
   State<MyNavigationBar> createState() => _MyNavigationBarState();
@@ -70,7 +71,9 @@ class _MyNavigationBarState extends State<MyNavigationBar>
         });
       }
     });
+
   }
+
 
   @override
   void dispose() {
@@ -100,6 +103,7 @@ class _MyNavigationBarState extends State<MyNavigationBar>
 
   @override
   Widget build(BuildContext context) {
+
     return AnimatedBuilder(
         animation: animationController,
         builder: (context, child) {

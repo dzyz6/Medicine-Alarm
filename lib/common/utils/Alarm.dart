@@ -38,6 +38,7 @@ class Alarm {
         map['medicine'], map["finishDelete"],map["open"]);
   }
 
+
   static Future<void> createAlarm(
     int hour,
     int minute,
@@ -63,5 +64,13 @@ class Alarm {
   static Future<List<Alarm>> getAlarmList() async {
     MySharedPreference mySharedPreference = MySharedPreference();
     return await mySharedPreference.getAlarmList();
+  }
+
+  static Future<void> removeAllAlarm() async {
+    MySharedPreference mySharedPreference = MySharedPreference();
+     List list = await getAlarmList();
+     for(Alarm a in list){
+       mySharedPreference.deleteAlarm(a.id);
+     }
   }
 }
