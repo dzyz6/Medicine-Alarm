@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:nhelp/common/utils/Alarm.dart';
 
+import '../../models/Alarm.dart';
 import '../localstorage/MySharedPreference.dart';
 
 class AlarmDelete extends ChangeNotifier{

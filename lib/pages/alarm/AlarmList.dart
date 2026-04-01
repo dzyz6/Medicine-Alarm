@@ -6,10 +6,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nhelp/common/localstorage/MySharedPreference.dart';
 import 'package:nhelp/common/provider/AlarmDelete.dart';
 import 'package:nhelp/common/utils/Color.dart';
-import 'package:nhelp/secondpage/widget/AlarmContainer.dart';
+import 'package:nhelp/pages/alarm/widget/AlarmContainer.dart';
+
 import 'package:provider/provider.dart';
 
-import '../common/utils/Alarm.dart';
+import '../../models/Alarm.dart';
+
 
 class AlarmList extends StatefulWidget {
   const AlarmList({super.key});
@@ -23,7 +25,7 @@ class _AlarmListState extends State<AlarmList> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<AlarmDelete>(context);
+    var provider = Provider.of<AlarmDelete>(context,listen: false);
     return ValueListenableBuilder(
         valueListenable: alarmRefreshNotifier,
         builder: (context, value, child) {

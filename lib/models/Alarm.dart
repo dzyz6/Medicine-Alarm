@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
-import '../localstorage/MySharedPreference.dart';
+import '../common/localstorage/MySharedPreference.dart';
+
 
 
 // 全局单一变量
@@ -66,11 +68,10 @@ class Alarm {
     return await mySharedPreference.getAlarmList();
   }
 
-  static Future<void> removeAllAlarm() async {
+  static Future<void> removeAllAlarm(List list) async {
     MySharedPreference mySharedPreference = MySharedPreference();
-     List list = await getAlarmList();
-     for(Alarm a in list){
-       mySharedPreference.deleteAlarm(a.id);
+     for(int id in list){
+       await mySharedPreference.deleteAlarm(id);
      }
   }
 }

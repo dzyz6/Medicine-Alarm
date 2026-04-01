@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nhelp/common/utils/Color.dart';
 import 'package:nhelp/common/utils/CommonPrefs.dart';
 
-import 'MyButton.dart';
+import '../../../common/widget/MyButton.dart';
 
 
 

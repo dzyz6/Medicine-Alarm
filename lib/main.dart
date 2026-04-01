@@ -5,9 +5,10 @@ import 'package:nhelp/common/provider/AlarmDelete.dart';
 import 'package:nhelp/common/utils/Color.dart';
 import 'package:provider/provider.dart';
 import 'common/provider/PageChange.dart';
-import 'common/utils/Alarm.dart';
-import 'firstpage/AskPage.dart';
-import 'navigationbar/MyNavigationBar.dart';
+
+
+import 'common/widget/MyNavigationBar.dart';
+import 'models/Alarm.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -79,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: GestureDetector(
                   onTap: () async {
                     final alarmDelete = Provider.of<AlarmDelete>(context, listen: false);
-                    await Alarm.removeAllAlarm();
+                    await Alarm.removeAllAlarm(alarmDelete.selectedId.toList());
                     alarmDelete.setMode(false);
                     alarmDelete.clearSet();
                   },

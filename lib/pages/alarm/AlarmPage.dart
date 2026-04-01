@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nhelp/common/localstorage/MySharedPreference.dart';
 import 'package:nhelp/common/provider/AlarmDelete.dart';
 import 'package:nhelp/common/utils/Color.dart';
+import 'package:nhelp/common/utils/PopGesture.dart';
 import 'package:provider/provider.dart';
 import 'AddAlarm.dart';
 import 'AlarmList.dart';
@@ -16,6 +17,27 @@ class AlarmPage extends StatefulWidget {
 }
 
 class _AlarmPageState extends State<AlarmPage> {
+
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      PopGesture.listen((){
+        var provider=Provider.of<AlarmDelete>(context,listen: false);
+        if(provider.isDeleteMode){
+          provider.setMode(false);
+          provider.clearSet();
+        }
+        else{
+          Navigator.pop(context);
+        }
+      });
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     var isDeleteMode = Provider.of<AlarmDelete>(context).isDeleteMode;

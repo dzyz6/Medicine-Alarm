@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nhelp/common/localstorage/MySharedPreference.dart';
-import 'package:nhelp/common/utils/Alarm.dart';
-import 'package:nhelp/secondpage/widget/OnTapContainer.dart';
 
-import '../common/utils/Color.dart';
-import '../common/utils/CommonPrefs.dart';
+import 'package:nhelp/pages/alarm/widget/OnTapContainer.dart';
+
+import '../../common/utils/Color.dart';
+import '../../common/utils/CommonPrefs.dart';
+import '../../models/Alarm.dart';
 
 
 class AddAlarm extends StatefulWidget {

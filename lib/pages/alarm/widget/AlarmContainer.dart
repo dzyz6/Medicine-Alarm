@@ -4,10 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nhelp/common/provider/AlarmDelete.dart';
 import 'package:nhelp/common/utils/Color.dart';
 import 'package:nhelp/common/utils/CommonPrefs.dart';
-import 'package:nhelp/secondpage/widget/MyButton.dart';
+
 import 'package:provider/provider.dart';
 
-import '../../common/utils/Alarm.dart';
+
+import '../../../common/widget/MyButton.dart';
+import '../../../models/Alarm.dart';
 
 class AlarmContainer extends StatefulWidget {
   AlarmContainer(
