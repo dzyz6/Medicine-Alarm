@@ -38,6 +38,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   shared_preferences: ^2.2.3
   alarm: ^4.0.6
+  flutter_riverpod: ^2.3.6
 
 dev_dependencies:
   flutter_test:

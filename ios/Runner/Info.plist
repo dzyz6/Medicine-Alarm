@@ -45,5 +45,14 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- 后台模式 -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>fetch</string>
+        <string>remote-notification</string>
+    </array>
+    <!-- 通知权限 -->
+    <key>NSUserNotificationUsageDescription</key>
+    <string>需要通知权限来提醒您闹钟</string>
 </dict>
 </plist>
