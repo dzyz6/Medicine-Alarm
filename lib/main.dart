@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nhelp/common/localstorage/MySharedPreference.dart';
 import 'package:nhelp/common/provider/AlarmDelete.dart';
 import 'package:nhelp/common/utils/Color.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as oldProvider;
 import 'common/provider/PageChange.dart';
-
-
+import 'package:alarm/alarm.dart' as pluginAlarm;
 import 'common/widget/MyNavigationBar.dart';
 import 'models/Alarm.dart';
 
-void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (context) => PageChange()),
-      ChangeNotifierProvider(create: (context) => AlarmDelete()),
-    ],
-    child: MyApp(),
-  ));
+void main() async {
+  await pluginAlarm.Alarm.init();
+  runApp(
+    ProviderScope(
+      child: oldProvider.MultiProvider(
+        providers: [
+          oldProvider.ChangeNotifierProvider(create: (context) => PageChange()),
+          oldProvider.ChangeNotifierProvider(create: (context) => AlarmDelete()),
+        ],
+        child: const MyApp(),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -58,7 +63,9 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Stack(
         children: [
           // 1. 页面内容（最下层）
-          Provider.of<PageChange>(context, listen: true).mainPage,
+          oldProvider.Consumer<PageChange>(builder: (context,value,child){
+            return value.mainPage;
+          }),
 
           // 2. 导航栏（中层）
           Positioned(
@@ -79,7 +86,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.white,
                 child: GestureDetector(
                   onTap: () async {
-                    final alarmDelete = Provider.of<AlarmDelete>(context, listen: false);
+                    final alarmDelete = oldProvider.Provider.of<AlarmDelete>(
+                        context,
+                        listen: false);
                     await Alarm.removeAllAlarm(alarmDelete.selectedId.toList());
                     alarmDelete.setMode(false);
                     alarmDelete.clearSet();
@@ -99,3 +108,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+

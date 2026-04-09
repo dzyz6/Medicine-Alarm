@@ -1,6 +1,8 @@
+import 'package:alarm/model/alarm_settings.dart';
+import 'package:alarm/model/notification_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-
+import 'package:alarm/alarm.dart' as pluginAlarm;
 import '../common/localstorage/MySharedPreference.dart';
 
 
@@ -52,6 +54,24 @@ class Alarm {
     await mySharedPreference.saveId();
     int id = await mySharedPreference.getId();
     Alarm alarm = Alarm(id, hour, minute, vibrate, medicine, finishDelete,true);
+    var now=DateTime.now();
+    var i=0;
+    if(now.hour<=hour&&now.minute<=minute){
+      i=1;
+    }
+    final alarmSettings = AlarmSettings(
+      id: id,
+      dateTime: DateTime(now.year,now.month,now.day+i,hour,minute),
+      assetAudioPath:  'lib/common/assets/alarm.mp3', // 你的闹钟音频
+      loopAudio: true, // 循环响铃
+      vibrate: vibrate, // 震动
+      // Android 全屏通知（更像闹钟）
+      androidFullScreenIntent: true,
+      notificationSettings: const NotificationSettings(
+        title: '用药提醒',
+        body: '该吃药了！',
+      ),
+    );
     await mySharedPreference.saveAlarmList(alarm);
   }
 
@@ -60,6 +80,7 @@ class Alarm {
     MySharedPreference mySharedPreference = MySharedPreference();
     Alarm a=await mySharedPreference.getAlarmById(id);
     a.open=!a.open;
+    await pluginAlarm.Alarm.stop(id);
     await mySharedPreference.setAlarm(a);
   }
 
@@ -73,5 +94,6 @@ class Alarm {
      for(int id in list){
        await mySharedPreference.deleteAlarm(id);
      }
+    await pluginAlarm.Alarm.stopAll();
   }
 }
