@@ -11,13 +11,15 @@ import 'common/widget/MyNavigationBar.dart';
 import 'models/Alarm.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await pluginAlarm.Alarm.init();
   runApp(
     ProviderScope(
       child: oldProvider.MultiProvider(
         providers: [
           oldProvider.ChangeNotifierProvider(create: (context) => PageChange()),
-          oldProvider.ChangeNotifierProvider(create: (context) => AlarmDelete()),
+          oldProvider.ChangeNotifierProvider(
+              create: (context) => AlarmDelete()),
         ],
         child: const MyApp(),
       ),
@@ -63,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Stack(
         children: [
           // 1. 页面内容（最下层）
-          oldProvider.Consumer<PageChange>(builder: (context,value,child){
+          oldProvider.Consumer<PageChange>(builder: (context, value, child) {
             return value.mainPage;
           }),
 
@@ -108,4 +110,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-

@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,31 +31,36 @@ class _AddAlarmState extends State<AddAlarm> {
   bool finishDelete=false;
 
   ///计算选择时间与当前差
+  /// 计算选择时间与当前差（修复版）
   Duration timeCalculate() {
-    DateTime dateTime = DateTime.now();
     if (!fixedExtentScrollController.hasClients ||
         !fixedExtentScrollController2.hasClients) {
-      return Duration(hours: 23, minutes: 59); // 或其他默认值
+      return Duration.zero;
     }
-    DateTime dateTime2 = DateTime(
-        dateTime.year,
-        dateTime.month,
-        dateTime.day,
-        fixedExtentScrollController.selectedItem,
-        fixedExtentScrollController2.selectedItem,
-        0,
-        0);
-    if (dateTime.isBefore(dateTime2)) {
-      return dateTime2.difference(dateTime);
+
+    DateTime now = DateTime.now();
+    int selectedHour = fixedExtentScrollController.selectedItem % 24;
+    int selectedMinute = fixedExtentScrollController2.selectedItem % 60;
+
+    // 构建今天的目标时间
+    DateTime targetTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      selectedHour,
+      selectedMinute,
+    );
+
+    Duration diff;
+    if (targetTime.isAfter(now)) {
+      // 时间还没到，用今天
+      diff = targetTime.difference(now);
     } else {
-      DateTime dateTime3 = DateTime(
-          dateTime.year,
-          dateTime.month,
-          dateTime.day + 1,
-          fixedExtentScrollController.selectedItem,
-          fixedExtentScrollController2.selectedItem);
-      return dateTime3.difference(dateTime);
+      // 时间已过，用明天
+      diff = targetTime.add(const Duration(days: 1)).difference(now);
     }
+
+    return diff;
   }
 
   @override
@@ -184,13 +191,10 @@ class _AddAlarmState extends State<AddAlarm> {
                       style: TextStyle(fontSize: 20.sp),
                     ),
                     Text(
-                      (timeCalculate().inHours == 0) &&
-                          (timeCalculate().inMinutes % 60) == 0
+                      (timeCalculate().inHours == 0 && timeCalculate().inMinutes.remainder(60) == 0)
                           ? "不到1分钟后响铃"
-                          : "${timeCalculate().inHours}小时${timeCalculate()
-                          .inMinutes % 60}分钟后响铃",
-                      style:
-                      TextStyle(fontSize: 15.sp, color: Colors.grey[700]),
+                          : "${timeCalculate().inHours}小时${timeCalculate().inMinutes.remainder(60)}分钟后响铃",
+                      style: TextStyle(fontSize: 15.sp, color: Colors.grey[700]),
                     )
                   ],
                 );
